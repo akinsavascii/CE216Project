@@ -4,23 +4,24 @@ import java.util.List;
 // The Book class
 class Book {
 
-    private String title;
-    private String subtitle;
-    private List<String> authors;
-    private List<String> translators;
-    private String isbn;
-    private String publisher;
-    private String date;
-    private int edition;
-    private String cover;
-    private String language;
-    private double rating;
-    private List<String> tags;
+    private String title = null;
+    private String subtitle = null;
+    private ArrayList<String> authors = null;
+    private ArrayList<String> translators = null;
+    private String isbn = null;
+    private String publisher = null;
+    private String date = null;
+    private String edition = null;
+    private String cover = null;
+    private String language = null;
+    private String rating = null;
+    private ArrayList<String> tags = null;
+    
 
     // Constructor for books attributes
-    public Book(String title, String subtitle, List<String> authors, List<String> translators,
-                String isbn, String publisher, String date, int edition, String cover,
-                String language, double rating) {
+    public Book(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators,
+                String isbn, String publisher, String date, String edition, String cover,
+                String language, String rating,ArrayList<String> tags) {
 
         this.title = title;
         this.subtitle = subtitle;
@@ -33,22 +34,11 @@ class Book {
         this.cover = cover;
         this.language = language;
         this.rating = rating;
+        this.tags=tags;    
+    }
 
-        tags.add(title);
-        tags.add(subtitle);
-        tags.add(isbn);
-        tags.add(publisher);
-        tags.add(date);
-        tags.add(toString(edition));
-        tags.add(toString(rating));
-        tags.add(cover);
-        tags.add(language);
-        for(int i = 0;i<authors.size();i++){
-            tags.add(authors(i));
-        }
-        for(int i = 0;i<translators.size();i++){
-            tags.add(translators(i));
-        }
+    public Book(){
+
     }
 
 
@@ -56,8 +46,10 @@ class Book {
 
 
 
-
     //getters
+    public ArrayList<String> getTags() {
+        return tags;
+    }
     public List<String> getAuthors() {
         return authors;
     }
@@ -67,7 +59,7 @@ class Book {
     public String getDate() {
         return date;
     }
-    public int getEdition() {
+    public String getEdition() {
         return edition;
     }
     public String getIsbn() {
@@ -79,14 +71,11 @@ class Book {
     public String getPublisher() {
         return publisher;
     }
-    public double getRating() {
+    public String getRating() {
         return rating;
     }
     public String getSubtitle() {
         return subtitle;
-    }
-    public List<String> getTags() {
-        return tags;
     }
     public String getTitle() {
         return title;
@@ -96,7 +85,10 @@ class Book {
     }
 
     //setters
-    public void setAuthors(List<String> authors) {
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+    public void setAuthors(ArrayList<String> authors) {
         this.authors = authors;
     }
     public void setCover(String cover) {
@@ -105,7 +97,7 @@ class Book {
     public void setDate(String date) {
         this.date = date;
     }
-    public void setEdition(int edition) {
+    public void setEdition(String edition) {
         this.edition = edition;
     }
     public void setIsbn(String isbn) {
@@ -117,20 +109,16 @@ class Book {
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
-    public void setRating(double rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
-    public void setTags(List<String> tags) {
-
-        this.tags = tags;
-    }
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setTranslators(List<String> translators) {
+    public void setTranslators(ArrayList<String> translators) {
         this.translators = translators;
     }
 }
