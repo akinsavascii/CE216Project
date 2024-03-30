@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import com.google.gson.Gson;
 
 // The Book class
 class Book {
@@ -121,4 +124,142 @@ class Book {
     public void setTranslators(ArrayList<String> translators) {
         this.translators = translators;
     }
+
+    // Method to edit book information
+    public void editAllBookInfo(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators,
+                             String isbn, String publisher, String date, String edition, String cover,
+                             String language, String rating,ArrayList<String> tags, String filename) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.authors = authors;
+        this.translators = translators;
+        this.isbn = isbn;
+        this.publisher = publisher;
+        this.date = date;
+        this.edition = edition;
+        this.cover = cover;
+        this.language = language;
+        this.rating = rating;
+        this.tags = tags;
+        updateJson(filename);
+    }
+
+    // Method to edit book attributes separately
+    public void editDate(String date, String filename) {
+        this.date = date;
+        updateJson(filename);
+    }
+
+    public void editEdition(String edition, String filename) {
+        this.edition = edition;
+        updateJson(filename);
+    }
+
+    public void editIsbn(String isbn, String filename) {
+        this.isbn = isbn;
+        updateJson(filename);
+    }
+
+    public void editLanguage(String language, String filename) {
+        this.language = language;
+        updateJson(filename);
+    }
+
+    public void editPublisher(String publisher, String filename) {
+        this.publisher = publisher;
+        updateJson(filename);
+    }
+
+    public void editRating(String rating, String filename) {
+        this.rating = rating;
+        updateJson(filename);
+    }
+
+    public void editSubtitle(String subtitle, String filename) {
+        this.subtitle = subtitle;
+        updateJson(filename);
+    }
+
+    public void editTitle(String title, String filename) {
+        this.title = title;
+        updateJson(filename);
+    }
+
+    public void editTranslators(ArrayList<String> translators, String filename) {
+        this.translators = translators;
+        updateJson(filename);
+    }
+
+    /*
+    bunun calismasi icin build.gradle a su dependenciyi eklemek lazim!!!!!
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
+        </dependency>
+    </dependencies>
+
+    AMA SUANLIK INTELLIJDEN YAPTIM:
+    FILE->PROJECT STRUCTURE->LIBRARIES e girip dc den attigim jar dosyasini koyarsaniz oluyor
+     */
+
+    private void updateJson(String filename) {
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        try (FileWriter writer = new FileWriter(filename)) {
+            gson.toJson(this, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // Method to delete all book information
+    public void deleteBookInfo() {
+        this.title = null;
+        this.subtitle = null;
+        this.authors = null;
+        this.translators = null;
+        this.isbn = null;
+        this.publisher = null;
+        this.date = null;
+        this.edition = null;
+        this.cover = null;
+        this.language = null;
+        this.rating = null;
+        this.tags = null;
+    }
+
+    //Method to delete attributes separately
+
+    public void delDate(String date) {
+        this.date = null;
+    }
+    public void delEdition(String edition) {
+        this.edition = null;
+    }
+    public void delIsbn(String isbn) {
+        this.isbn = null;
+    }
+    public void delLanguage(String language) {
+        this.language = null;
+    }
+    public void delPublisher(String publisher) {
+        this.publisher = null;
+    }
+    public void delRating(String rating) {
+        this.rating = null;
+    }
+    public void delSubtitle(String subtitle) {
+        this.subtitle = null;
+    }
+    public void delTitle(String title) {
+        this.title = null;
+    }
+    public void delTranslators(ArrayList<String> translators) {
+        this.translators = null;
+    }
+
 }
