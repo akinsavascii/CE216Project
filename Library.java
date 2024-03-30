@@ -21,5 +21,46 @@ public class Library{
         Library.library = library;
     }
 
+        //checks if all given tags by user are matches with books data. otherwise adds nothing
+    public static void listedBooksBySelectedTags(ArrayList<String> selectedTags)
+        {
+            ArrayList<Book> selectedBooks = new ArrayList<>();
+            
+            
+            for(Book book: library)
+            {
+                boolean match = true;
+    
+                for(String tag : selectedTags)
+                {
+                    if(!book.getTags().contains(tag));
+                    {
+                        match = false;
+                        break;
+                    }
+    
+                }
+                if(match)
+                {
+                    selectedBooks.add(book);
+                }
+    
+            }
+    
+            if(selectedBooks.isEmpty())
+            {
+                System.out.println("There isn't any specific book that contains your tag.");
+    
+            }
+            else
+            {
+                System.out.println("Books that contains your search criterion.");
+                for(Book book:selectedBooks)
+                {
+                    System.out.println(book.getTitle());
+                }
+            }
+        }
+
     
 }
