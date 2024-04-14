@@ -96,7 +96,7 @@ public class GUI extends Application {
             {
                 searchBar.clear();
             }
-            ArrayList<Book> searchedBooks = Library.search(textToSearch);
+            ArrayList<Book> searchedBooks = Library.searchm(textToSearch);
             ObservableList<String> bookTitles = FXCollections.observableArrayList(
                     searchedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
             );

@@ -1,6 +1,8 @@
 import java.io.*;
 
 import javax.json.*;
+import javax.swing.text.html.HTML.Tag;
+
 //import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -129,6 +131,10 @@ public class JsonHandler {
                 }
             }
             
+            input.setTags(tagList);
+        } else if (!bookObject.containsKey("tags")) {
+            ArrayList<String> tagList = new ArrayList<>();
+            tagList.add(" ");
             input.setTags(tagList);
         }
 

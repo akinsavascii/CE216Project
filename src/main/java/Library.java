@@ -37,6 +37,7 @@ public class Library{
         cBook.setTags(tags);
         lib.addToLib(cBook);
         cBook.updateAttr(cBook);
+        System.out.println("123");
     }
 
     public static ArrayList<Book> search(String search) {
@@ -59,6 +60,7 @@ public class Library{
             for(int i =0;i<Library.library.size();i++) {
                 if (Library.library.get(i).getAttr()!=null) {
                    if(Library.library.get(i).getAttr().contains(parts[0])){
+                        System.out.println(Library.library.get(i).getAttr().get(i));
                         if(!DisplaySearch.contains(Library.library.get(i))){
                         DisplaySearch.add(Library.library.get(i)); 
                         }
@@ -72,7 +74,22 @@ public class Library{
 
         return DisplaySearch;
     }
-
+    public static ArrayList<Book> searchm(String search) {
+        ArrayList<Book> DisplaySearch = new ArrayList<Book>();
+        String[] parts = search.split(" ");
+            for (int j =0;j<parts.length;j++){
+                String search2 = parts[j];
+                for(int i =0;i<Library.library.size();i++) {
+                    if (Library.library.get(i).getAttr()!=null) {
+                        if(Library.library.get(i).getAttr().contains(search2)){
+                            if(!DisplaySearch.contains(Library.library.get(i))){
+                            DisplaySearch.add(Library.library.get(i));}
+                        }
+                    }
+                }
+            }
+            return DisplaySearch;
+    }
 
     public static void booktagprint(Book book){
         if (book.getTags() != null) {

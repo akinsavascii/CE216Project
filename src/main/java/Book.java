@@ -132,6 +132,7 @@ class Book {
     public void editAllBookInfo(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators,
                              String isbn, String publisher, String date, String edition, String cover,
                              String language, String rating,ArrayList<String> tags, Book book) {
+        ArrayList<String> temptag = new ArrayList<String>();
         this.title = title;
         this.subtitle = subtitle;
         this.authors = authors;
@@ -143,7 +144,11 @@ class Book {
         this.cover = cover;
         this.language = language;
         this.rating = rating;
-        this.tags = tags;
+        if(tags == null) {
+            this.tags=temptag;
+        } else {
+            this.tags = tags;
+        }
         updateAttr(book);
         //updateJson(filename);
     }
@@ -208,9 +213,13 @@ class Book {
         }
     }*/
     public void updateAttr(Book book) {
+        ArrayList<String> atr = new ArrayList<String>();
         if (book.getAttr()!=null) {
             book.getAttr().clear();
+        } else {
+            book.setAttr(atr);
         }
+        
         String[] divide ;
         if (book.getTitle()!=null){
             divide = book.getTitle().split(" ");
