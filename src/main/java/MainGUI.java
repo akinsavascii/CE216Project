@@ -2,9 +2,6 @@ import java.util.ArrayList;
 
 public class MainGUI {
     public static void main(String[] args) {
-        Library lib = new Library();
-        JsonHandler jsn = new JsonHandler();
-        jsn.readFile(lib, "test.json");
 
         /*System.out.println(lib.getLibraries().get(0).getTitle());*/
 
