@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,16 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+
+        jsn.readFile(library , "test.json"); //reads file first to make them appear when the program opens.
+        ArrayList<Book> savedBooks = library.getLibraries();
+        ObservableList<String> SavedBookTitles = FXCollections.observableArrayList(
+                savedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
+        );
+        bookListView.setItems(SavedBookTitles);
+
+
         Button addBookButton = new Button("AddBook");
         Button importButton = new Button("Import");
         Button exportButton = new Button("Export");
@@ -283,6 +294,11 @@ public class GUI extends Application {
                 books.stream().map(Book::getTitle).collect(Collectors.toList())
         );
         bookListView.setItems(bookTitles);
+    }
+
+    @Override
+    public void stop() {
+        jsn.writeToJson(library , "test.json" , false);
     }
 
     public static void main(String[] args) {

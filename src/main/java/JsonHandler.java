@@ -220,14 +220,14 @@ public class JsonHandler {
         input.setAttr(attrList);
         lib.addToLib(input);
 
-        /*boolean ckck = false;
+        boolean ckck = false;
         for (int m = 0;m<lib.getLibraries().size();m++){
             if(lib.getLibraries().get(m).getIsbn().equals(input.getIsbn())){
                 ckck= true;
                 break;
             }
         }
-        if(!ckck){lib.addToLib(input);}*/
+        if(!ckck){lib.addToLib(input);}
     }
 
     public void writeToJson(Library input , String filePath , boolean mode) {
