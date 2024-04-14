@@ -141,19 +141,24 @@ public class JsonHandler {
         for (int l = 0;l<divide.length;l++) {
             attrList.add(divide[l]);
         }
-        //bakıcaz autohor kelimeleri ayırıyor mu
+        //autohor kelimeleri ayırıyor 
         if(input.getAuthors()!=null) {
             for(int i = 0;i<input.getAuthors().size();i++){
-                attrList.add(input.getAuthors().get(i));
+                divide = input.getAuthors().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    attrList.add(divide[l]);
+                }
             }
         }
         //aynı şekilde translator
         if(input.getTranslators()!=null) {
             for(int i = 0;i<input.getTranslators().size();i++){
-                attrList.add(input.getTranslators().get(i));
+                divide = input.getTranslators().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    attrList.add(divide[l]);
+                }
             }
         }
-        //devam
 
         divide = input.getIsbn().split(" ");
         for (int l = 0;l<divide.length;l++) {
@@ -187,7 +192,10 @@ public class JsonHandler {
         
         if(input.getTags()!=null) {
             for(int i = 0;i<input.getTags().size();i++){
-                attrList.add(input.getTags().get(i));
+                divide = input.getTags().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    attrList.add(divide[l]);
+                }
             }
         }
         input.setAttr(attrList);
@@ -277,7 +285,7 @@ public class JsonHandler {
                             for ( String tag : lib.get(i).getTags()) {
                                 tags.add(tag);
                             }
-                            obj.add("translators" , tags);
+                            obj.add("tags" , tags);
                         }
                     }
                     if (input.getSize() == 1) {
@@ -299,29 +307,3 @@ public class JsonHandler {
     }
 
 }
-//eski formül şimdilik kalsın might use later...
-/*      attrList.add(input.getTitle());
-        attrList.add(input.getSubtitle());
-        if(input.getAuthors()!=null) {
-            for(int i = 0;i<input.getAuthors().size();i++){
-                attrList.add(input.getAuthors().get(i));
-            }
-        }
-
-        if(input.getTranslators()!=null) {
-            for(int i = 0;i<input.getTranslators().size();i++){
-                attrList.add(input.getTranslators().get(i));
-            }
-        }
-        attrList.add(input.getIsbn());
-        attrList.add(input.getPublisher());
-        attrList.add(input.getDate());
-        attrList.add(input.getEdition());
-        attrList.add(input.getLanguage());
-        attrList.add(input.getRating());
-        attrList.add(input.getCover());
-        if(input.getTags()!=null) {
-            for(int i = 0;i<input.getTags().size();i++){
-                attrList.add(input.getTags().get(i));
-            }
-        } */

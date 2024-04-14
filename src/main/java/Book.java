@@ -131,7 +131,7 @@ class Book {
     // Method to edit book information
     public void editAllBookInfo(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators,
                              String isbn, String publisher, String date, String edition, String cover,
-                             String language, String rating,ArrayList<String> tags, String filename) {
+                             String language, String rating,ArrayList<String> tags, Book book) {
         this.title = title;
         this.subtitle = subtitle;
         this.authors = authors;
@@ -144,60 +144,61 @@ class Book {
         this.language = language;
         this.rating = rating;
         this.tags = tags;
-        updateJson(filename);
+        updateAttr(book);
+        //updateJson(filename);
     }
 
     // Method to edit book attributes separately
-    public void editDate(String date, String filename) {
+    public void editDate(String date, Book book) {
         this.date = date;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editEdition(String edition, String filename) {
+    public void editEdition(String edition, Book book) {
         this.edition = edition;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editIsbn(String isbn, String filename) {
+    public void editIsbn(String isbn, Book book) {
         this.isbn = isbn;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editLanguage(String language, String filename) {
+    public void editLanguage(String language, Book book) {
         this.language = language;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editPublisher(String publisher, String filename) {
+    public void editPublisher(String publisher, Book book) {
         this.publisher = publisher;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editRating(String rating, String filename) {
+    public void editRating(String rating, Book book) {
         this.rating = rating;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editSubtitle(String subtitle, String filename) {
+    public void editSubtitle(String subtitle, Book book) {
         this.subtitle = subtitle;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editTitle(String title, String filename) {
+    public void editTitle(String title, Book book) {
         this.title = title;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    public void editTranslators(ArrayList<String> translators, String filename) {
+    public void editTranslators(ArrayList<String> translators, Book book) {
         this.translators = translators;
-        updateJson(filename);
+        updateAttr(book);
     }
-    public void editTags(ArrayList<String> tags, String filename) {
+    public void editTags(ArrayList<String> tags, Book book) {
         this.tags = tags;
-        updateJson(filename);
+        updateAttr(book);
     }
 
-    private void updateJson(String filename) {
+    /*private void updateJson(String filename) {
         Gson gson = new Gson();
         String json = gson.toJson(this);
         try (FileWriter writer = new FileWriter(filename)) {
@@ -205,9 +206,70 @@ class Book {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public void updateAttr(Book book) {
         book.getAttr().clear();
+        String[] divide ;
+        divide = book.getTitle().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getSubtitle().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        if(book.getAuthors()!=null) {
+            for(int i = 0;i<book.getAuthors().size();i++){
+                divide = book.getAuthors().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    book.getAttr().add(divide[l]);
+                }
+            }
+        }
+        if(book.getTranslators()!=null) {
+            for(int i = 0;i<book.getTranslators().size();i++){
+                divide = book.getTranslators().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    book.getAttr().add(divide[l]);
+                }
+            }
+        }
+        divide = book.getIsbn().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getPublisher().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getDate().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getEdition().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getLanguage().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getRating().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        divide = book.getCover().split(" ");
+        for (int l = 0;l<divide.length;l++) {
+            book.getAttr().add(divide[l]);
+        }
+        if(book.getTags()!=null) {
+            for(int i = 0;i<book.getTags().size();i++){
+                divide = book.getTags().get(i).split(" ");
+                for (int l = 0;l<divide.length;l++) {
+                    book.getAttr().add(divide[l]);
+                }
+            }
+        }
     }
 
 
