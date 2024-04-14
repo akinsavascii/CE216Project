@@ -22,10 +22,11 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Button addBookButton = new Button("AddBook");
         Button importButton = new Button("Import");
         Button exportButton = new Button("Export");
         Button helpButton = new Button("Help");
-        ToolBar toolBar = new ToolBar(importButton, exportButton, helpButton);
+        ToolBar toolBar = new ToolBar(addBookButton, exportButton, helpButton);
         VBox searchPaneTop = new VBox();
         VBox searchPaneBottom = new VBox();
         BorderPane catalogPane = new BorderPane();
@@ -99,7 +100,7 @@ public class GUI extends Application {
         primaryStage.setTitle("Blank Page");
         primaryStage.show();
 
-        importButton.setOnAction(event -> {
+        addBookButton.setOnAction(event -> {
             showImportDialog(primaryStage);
         });
 
@@ -121,28 +122,66 @@ public class GUI extends Application {
         dialog.setTitle("Import Book");
 
         TextField titleField = new TextField();
+        titleField.setPromptText("Title");
         TextField subtitleField = new TextField();
+        subtitleField.setPromptText("Subtitle");
         TextField authorField = new TextField();
+        authorField.setPromptText("Author(s)");
         TextField translatorField = new TextField();
+        translatorField.setPromptText("Translator(s)");
         TextField isbnField = new TextField();
+        isbnField.setPromptText("Isbn");
         TextField publisherField = new TextField();
+        publisherField.setPromptText("Publisher");
         TextField dateField = new TextField();
+        dateField.setPromptText("Date");
         TextField editionField = new TextField();
+        editionField.setPromptText("Edition");
+        TextField coverField = new TextField();
+        coverField.setPromptText("Cover");
+        TextField languageField = new TextField();
+        languageField.setPromptText("Language");
+        TextField ratingField = new TextField();
+        ratingField.setPromptText("Rating");
+        TextField tagsField = new TextField();
+        tagsField.setPromptText("Tag(s)");
 
 
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> {
             String title = titleField.getText();
             String subtitle = subtitleField.getText();
+            String authortxt = authorField.getText();
+            String translatortxt = translatorField.getText();
+            String isbn = isbnField.getText();
+            String publisher = publisherField.getText();
+            String date = dateField.getText();
+            String edition = editionField.getText();
+            String cover = coverField.getText();
+            String language = languageField.getText();
+            String rating = ratingField.getText();
+            String tagtxt = tagsField.getText();
             
 
-
+            String[] divider;
             ArrayList<String> authors = new ArrayList<>();
+            divider = authortxt.split(",");
+            for (int k =0;k<divider.length;k++) {
+                authors.add(divider[k]);
+            }
             ArrayList<String> translators = new ArrayList<>();
+            divider = translatortxt.split(",");
+            for (int k =0;k<divider.length;k++) {
+                translators.add(divider[k]);
+            }
             ArrayList<String> tags = new ArrayList<>(); 
+            divider = tagtxt.split(",");
+            for (int k =0;k<divider.length;k++) {
+                tags.add(divider[k]);
+            }
 
 
-            Library.createBook(library, title, subtitle, authors, translators, "", "", "", "", "", "", "", tags); 
+            Library.createBook(library, title, subtitle, authors, translators, isbn, publisher, date, edition, cover, language, rating, tags); 
 
 
             dialog.close(); 
@@ -152,8 +191,8 @@ public class GUI extends Application {
 
         VBox dialogVbox = new VBox(20);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-        dialogVbox.getChildren().addAll(titleField, subtitleField, saveButton); 
-        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialogVbox.getChildren().addAll(titleField, subtitleField,authorField,translatorField, isbnField,publisherField,dateField,editionField,coverField,languageField,ratingField,tagsField, saveButton); 
+        Scene dialogScene = new Scene(dialogVbox, 300, 600);
         dialog.setScene(dialogScene);
         dialog.show();
     }

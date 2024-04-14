@@ -208,25 +208,35 @@ class Book {
         }
     }*/
     public void updateAttr(Book book) {
-        book.getAttr().clear();
+        if (book.getAttr()!=null) {
+            book.getAttr().clear();
+        }
         String[] divide ;
         if (book.getTitle()!=null){
             divide = book.getTitle().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getSubtitle()!=null){
             divide = book.getSubtitle().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
+
             }
         }
         if(book.getAuthors()!=null) {
             for(int i = 0;i<book.getAuthors().size();i++){
                 divide = book.getAuthors().get(i).split(" ");
                 for (int l = 0;l<divide.length;l++) {
-                    book.getAttr().add(divide[l]);
+                    if (book.getAttr()!=null) {
+                        book.getAttr().add(divide[l]);
+                    }
+
                 }
             }
         }
@@ -234,57 +244,76 @@ class Book {
             for(int i = 0;i<book.getTranslators().size();i++){
                 divide = book.getTranslators().get(i).split(" ");
                 for (int l = 0;l<divide.length;l++) {
-                    book.getAttr().add(divide[l]);
+                    if (book.getAttr()!=null) {
+                        book.getAttr().add(divide[l]);
+                    }
+
                 }
             }
         }
         if (book.getIsbn()!=null){
             divide = book.getIsbn().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getPublisher()!=null) {
             divide = book.getPublisher().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getDate()!=null) {
             divide = book.getDate().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getEdition()!=null) {
             divide = book.getEdition().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getLanguage()!=null) {
             divide = book.getLanguage().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getLanguage()!=null) {
             divide = book.getRating().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if (book.getLanguage()!=null) {
             divide = book.getCover().split(" ");
             for (int l = 0;l<divide.length;l++) {
-                book.getAttr().add(divide[l]);
+                if (book.getAttr()!=null) {
+                    book.getAttr().add(divide[l]);
+                }
             }
         }
         if(book.getTags()!=null) {
             for(int i = 0;i<book.getTags().size();i++){
                 divide = book.getTags().get(i).split(" ");
                 for (int l = 0;l<divide.length;l++) {
-                    book.getAttr().add(divide[l]);
+                    if (book.getAttr()!=null) {
+                        book.getAttr().add(divide[l]);
+                    }
                 }
             }
         }

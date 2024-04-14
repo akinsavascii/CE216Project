@@ -36,6 +36,7 @@ public class Library{
         cBook.setRating(rating);
         cBook.setTags(tags);
         lib.addToLib(cBook);
+        cBook.updateAttr(cBook);
     }
 
     public static ArrayList<Book> search(String search) {
@@ -56,20 +57,18 @@ public class Library{
         }
         else {
             for(int i =0;i<Library.library.size();i++) {
-                if(Library.library.get(i).getAttr().contains(parts[0])){
-                    if(!DisplaySearch.contains(Library.library.get(i))){
+                if (Library.library.get(i).getAttr()!=null) {
+                   if(Library.library.get(i).getAttr().contains(parts[0])){
+                        if(!DisplaySearch.contains(Library.library.get(i))){
                         DisplaySearch.add(Library.library.get(i)); 
+                        }
                     }
                 }
+
             }
 
             
         }
-        //
-        for(int asd = 0;asd<DisplaySearch.size();asd++) {
-            System.out.println(DisplaySearch.get(asd).getTitle());
-        }
-        //
 
         return DisplaySearch;
     }

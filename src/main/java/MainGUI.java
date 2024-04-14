@@ -15,10 +15,6 @@ public class MainGUI {
         
 
         // search deneme (çalışıyor)
-        String search = "col";
-        lib.search(search);
-        lib.getLibraries().get(0).setTitle("humzh");
-        lib.search(search);
 
         //create book yazıyorum
         //irtibar : tuna
@@ -43,9 +39,9 @@ public class MainGUI {
         lib.booktagprint(lib.getLibraries().get(1));*/
 
         //tagla aramak (çalışıyor)
-        ArrayList<String> selectedTags = new ArrayList<String>();
+        /*ArrayList<String> selectedTags = new ArrayList<String>();
         selectedTags.add("frank");
-        lib.listByTags(selectedTags);
+        lib.listByTags(selectedTags);*/
 
         // bakılacak
         /*lib.getLibraries().get(0).editTitle("selam1 patlican", lib.getLibraries().get(0));
