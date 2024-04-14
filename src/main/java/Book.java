@@ -19,12 +19,13 @@ class Book {
     private String language = null;
     private String rating = null;
     private ArrayList<String> tags = null;
+    private ArrayList<String> attr = null;
     
 
     // Constructor for books attributes
     public Book(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators,
                 String isbn, String publisher, String date, String edition, String cover,
-                String language, String rating,ArrayList<String> tags) {
+                String language, String rating,ArrayList<String> tags,ArrayList<String> attr) {
 
         this.title = title;
         this.subtitle = subtitle;
@@ -37,19 +38,18 @@ class Book {
         this.cover = cover;
         this.language = language;
         this.rating = rating;
-        this.tags=tags;    
+        this.tags=tags;  
+        this.attr=attr;  
     }
 
     public Book(){
 
     }
 
-
-
-
-
-
     //getters
+    public ArrayList<String> getAttr() {
+        return attr;
+    }
     public ArrayList<String> getTags() {
         return tags;
     }
@@ -88,6 +88,9 @@ class Book {
     }
 
     //setters
+    public void setAttr(ArrayList<String> attr) {
+        this.attr = attr;
+    }
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }
@@ -189,6 +192,10 @@ class Book {
         this.translators = translators;
         updateJson(filename);
     }
+    public void editTags(ArrayList<String> tags, String filename) {
+        this.tags = tags;
+        updateJson(filename);
+    }
 
     private void updateJson(String filename) {
         Gson gson = new Gson();
@@ -198,6 +205,9 @@ class Book {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void updateAttr(Book book) {
+        book.getAttr().clear();
     }
 
 
