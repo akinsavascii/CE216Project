@@ -19,6 +19,7 @@ public class GUI extends Application {
     private ArrayList<String> searchStrings = new ArrayList<>();
     ListView<String> bookListView = new ListView<>();
     private Library library = new Library(); 
+    JsonHandler jsn = new JsonHandler();
 
     @Override
     public void start(Stage primaryStage) {
@@ -26,7 +27,7 @@ public class GUI extends Application {
         Button importButton = new Button("Import");
         Button exportButton = new Button("Export");
         Button helpButton = new Button("Help");
-        ToolBar toolBar = new ToolBar(addBookButton, exportButton, helpButton);
+        ToolBar toolBar = new ToolBar(addBookButton,importButton, exportButton, helpButton);
         VBox searchPaneTop = new VBox();
         VBox searchPaneBottom = new VBox();
         BorderPane catalogPane = new BorderPane();
@@ -103,6 +104,9 @@ public class GUI extends Application {
         addBookButton.setOnAction(event -> {
             showImportDialog(primaryStage);
         });
+        importButton.setOnAction(event -> {importAction();});
+        exportButton.setOnAction(event -> {exportAction();});
+        helpButton.setOnAction(event -> {helpAction(primaryStage);});
 
         bookListView.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
@@ -114,12 +118,32 @@ public class GUI extends Application {
             }
         });
     }
+    private void exportAction(){
+        jsn.writeToJson(library, "test.json", false);
+    }
+    private void importAction(){
+        jsn.readFile(library, "test.json");
+    }
+    private void helpAction(Stage primaryStage){
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        dialog.setTitle("Manuel");
+
+        Label manuelTxt = new Label("-Help Manual-\n\n1.Search: Write the attributes of the book you are searching for in the search bar. Then proceed to click the search button on the right.\n2.Books: Left click twice on the book that is wanted to be inspected. The book and its attributes will pop up.\n3.Tags: To narrow the seach with tags, there is a menu on the left. Click the boxes to narrow your search as needed. \n4.Delete/Edit: There is an edit menu on the top right. On the edit menu Delete/Edit operations can be done.\n5.Add: Adding operation can be done from Add menu. ");
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+        dialogVbox.getChildren().addAll(manuelTxt); 
+        Scene dialogScene = new Scene(dialogVbox, 800, 300);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
 
     private void showImportDialog(Stage primaryStage) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
-        dialog.setTitle("Import Book");
+        dialog.setTitle("Add Book");
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
