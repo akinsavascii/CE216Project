@@ -218,7 +218,6 @@ public class JsonHandler {
             }
         }
         input.setAttr(attrList);
-        lib.addToLib(input);
 
         boolean ckck = false;
         for (int m = 0;m<lib.getLibraries().size();m++){
