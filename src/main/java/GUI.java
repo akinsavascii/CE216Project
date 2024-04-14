@@ -21,6 +21,8 @@ public class GUI extends Application {
     ListView<String> bookListView = new ListView<>();
     private Library library = new Library(); 
     JsonHandler jsn = new JsonHandler();
+    Stage primaryStage = new Stage();
+    BorderPane inspectorPane = new BorderPane();
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,7 +44,7 @@ public class GUI extends Application {
         VBox searchPaneTop = new VBox();
         VBox searchPaneBottom = new VBox();
         BorderPane catalogPane = new BorderPane();
-        BorderPane inspectorPane = new BorderPane();
+
         TextField searchBar = new TextField();
         searchBar.setPromptText("Search");
         Button searchButton = new Button("Search");
@@ -200,17 +202,17 @@ public class GUI extends Application {
 
             String[] divider;
             ArrayList<String> authors = new ArrayList<>();
-            divider = authortxt.split(",");
+            divider = authortxt.split(", ");
             for (int k =0;k<divider.length;k++) {
                 authors.add(divider[k]);
             }
             ArrayList<String> translators = new ArrayList<>();
-            divider = translatortxt.split(",");
+            divider = translatortxt.split(", ");
             for (int k =0;k<divider.length;k++) {
                 translators.add(divider[k]);
             }
             ArrayList<String> tags = new ArrayList<>(); 
-            divider = tagtxt.split(",");
+            divider = tagtxt.split(", ");
             for (int k =0;k<divider.length;k++) {
                 tags.add(divider[k]);
             }
@@ -261,7 +263,7 @@ public class GUI extends Application {
             isbnLabel = new Label("Isbn: " + book.getIsbn());
         }
         if (book.getPublisher()!=null) {
-            publisherLabel = new Label("Publisher: " + book.getSubtitle());
+            publisherLabel = new Label("Publisher: " + book.getPublisher());
         }
         if (book.getDate()!=null) {
             dateLabel = new Label("Date: " + book.getDate());
@@ -286,7 +288,126 @@ public class GUI extends Application {
  
         VBox detailsBox = new VBox(titleLabel,subTitleLabel,authorLabel,translatorLabel,isbnLabel,publisherLabel,dateLabel,editionLabel,coverLabel,languageLabel,ratingLabel,tagLabel); 
         inspectorPane.setCenter(detailsBox);
+
+    Button editButton = new Button("Edit");
+    Button deleteButton = new Button("Delete");
+
+    VBox detailsBoxSecond = new VBox(titleLabel, subTitleLabel, authorLabel, translatorLabel, 
+                               isbnLabel, publisherLabel, dateLabel, editionLabel, 
+                               coverLabel, languageLabel, ratingLabel, tagLabel,
+                               editButton, deleteButton);
+
+    inspectorPane.setCenter(detailsBoxSecond);
+
+    deleteButton.setOnAction(e -> {
+        library.getLibraries().remove(book);
+        updateBookListView();
+        inspectorPane.setCenter(null);
+    });
+
+    editButton.setOnAction(e -> {
+        showEditDialog(primaryStage, book);
+    });
     }
+    private void showEditDialog(Stage primaryStage, Book book) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        dialog.setTitle("Edit Book");
+    
+        // Input fields (pre-filled with existing book data)
+        TextField titleField = new TextField(book.getTitle());
+        titleField.setPromptText("Title");
+        TextField subtitleField = new TextField(book.getSubtitle());
+        subtitleField.setPromptText("Subtitle");
+        TextField authorField = new TextField(String.join(", ", book.getAuthors()));
+        authorField.setPromptText("Author(s)");
+        TextField translatorField = new TextField(String.join(", ", book.getTranslators()));
+        translatorField.setPromptText("Translator(s)");
+        TextField isbnField = new TextField(book.getIsbn());
+        isbnField.setPromptText("Isbn");
+        TextField publisherField = new TextField(book.getPublisher());
+        publisherField.setPromptText("Publisher");
+        TextField dateField = new TextField(book.getDate());
+        dateField.setPromptText("Date");
+        TextField editionField = new TextField(book.getEdition());
+        editionField.setPromptText("Edition");
+        TextField coverField = new TextField(book.getCover());
+        coverField.setPromptText("Cover");
+        TextField languageField = new TextField(book.getLanguage());
+        languageField.setPromptText("Language");
+        TextField ratingField = new TextField(book.getRating());
+        ratingField.setPromptText("Rating");
+        TextField tagsField = new TextField(String.join(", ", book.getTags()));
+        tagsField.setPromptText("Tag(s)");
+    
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(e -> {
+            // Get updated values from fields
+            String title = titleField.getText();
+            String subtitle = subtitleField.getText();
+            String authortxt = authorField.getText();
+            String translatortxt = translatorField.getText();
+            String isbn = isbnField.getText();
+            String publisher = publisherField.getText();
+            String date = dateField.getText();
+            String edition = editionField.getText();
+            String cover = coverField.getText();
+            String language = languageField.getText();
+            String rating = ratingField.getText();
+            String tagtxt = tagsField.getText();
+    
+            // Parse authors and translators
+            String[] divider;
+            ArrayList<String> authors = new ArrayList<>();
+            divider = authortxt.split(",");
+            for (int k = 0; k < divider.length; k++) {
+                authors.add(divider[k].trim()); // Trim to remove extra spaces
+            }
+            ArrayList<String> translators = new ArrayList<>();
+            divider = translatortxt.split(",");
+            for (int k = 0; k < divider.length; k++) {
+                translators.add(divider[k].trim()); // Trim to remove extra spaces
+            }
+    
+            // Parse tags
+            ArrayList<String> tags = new ArrayList<>();
+            divider = tagtxt.split(",");
+            for (int k = 0; k < divider.length; k++) {
+                tags.add(divider[k].trim()); // Trim to remove extra spaces
+            }
+    
+            // Update the book object
+            book.setTitle(title);
+            book.setSubtitle(subtitle);
+            book.setAuthors(authors);
+            book.setTranslators(translators);
+            book.setIsbn(isbn);
+            book.setPublisher(publisher);
+            book.setDate(date);
+            book.setEdition(edition);
+            book.setCover(cover);
+            book.setLanguage(language);
+            book.setRating(rating);
+            book.setTags(tags);
+            book.updateAttr(book); 
+    
+            dialog.close();
+            updateBookListView();
+            displayBookDetails(book, inspectorPane); 
+        });
+    
+        // Dialog setup
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+        dialogVbox.getChildren().addAll(titleField, subtitleField, authorField, translatorField, 
+                                         isbnField, publisherField, dateField, editionField, 
+                                         coverField, languageField, ratingField, tagsField, saveButton);
+        Scene dialogScene = new Scene(dialogVbox, 300, 600);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
 
     private void updateBookListView() {
         ArrayList<Book> books = library.getLibraries();
