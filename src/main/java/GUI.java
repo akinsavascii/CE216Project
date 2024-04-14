@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class GUI extends Application {
     private ArrayList<String> labelStrings = new ArrayList<>();
+    private ArrayList<String> searchStrings = new ArrayList<>();
     private Library library = new Library(); // Assuming you have the Library class
 
     @Override
@@ -58,32 +59,57 @@ public class GUI extends Application {
         labelScrollPane.setContent(labelBox);
         labelScrollPane.setPrefHeight(250);
 
-        // Button to clear labels and search
-        Button clearButton = new Button("Clear");
-        clearButton.setOnAction(e -> {
+        Button filterButton = new Button("Filter");
+        filterButton.setOnAction(e -> {
             labelBox.getChildren().clear();
             labelStrings.clear();
-            // Add any other clearing actions here (e.g., clear search results)
+          
         });
 
-        searchPaneBottom.getChildren().addAll(addPane, labelScrollPane, clearButton);
+        searchPaneBottom.getChildren().addAll(addPane, labelScrollPane, filterButton);
 
         SplitPane searchSplitPane = new SplitPane(searchPaneTop, searchPaneBottom);
         searchSplitPane.setOrientation(javafx.geometry.Orientation.VERTICAL);
         searchSplitPane.setDividerPositions(0.3);
 
-        // ListView to display search results
+
         ListView<String> bookListView = new ListView<>();
         catalogPane.setCenter(bookListView);
 
-        clearButton.setOnAction(e -> {
+        filterButton.setOnAction(e -> {
             ArrayList<String> selectedTags = labelStrings;
-            ArrayList<Book> selectedBooks = Library.listedBooksBySelectedTags(selectedTags);
+            ArrayList<Book> selectedBooks = Library.listByTags(selectedTags);
             ObservableList<String> bookTitles = FXCollections.observableArrayList(
                     selectedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
             );
             bookListView.setItems(bookTitles);
+            labelBox.getChildren().clear();
+            labelStrings.clear();
         });
+
+
+
+        searchButton.setOnAction(e -> {
+            String textToSearch = searchBar.getText();
+            if(!textToSearch.isEmpty())
+            {
+                searchBar.clear();
+
+            }
+
+            ArrayList<Book> searchedBooks = Library.search(textToSearch);
+            ObservableList<String> bookTitles = FXCollections.observableArrayList(
+                    searchedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
+            );
+            bookListView.setItems(bookTitles);
+
+
+
+        }
+   
+        );
+
+
 
         SplitPane splitPane = new SplitPane(searchSplitPane, catalogPane, inspectorPane);
         splitPane.setDividerPositions(0.265, 0.6);
