@@ -133,13 +133,17 @@ public class JsonHandler {
 
         ArrayList<String> attrList = new ArrayList<>();
         String[] divide ;
-        divide = input.getTitle().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getTitle()!=null) {
+            divide = input.getTitle().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getSubtitle().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getSubtitle()!=null) {
+            divide = input.getSubtitle().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
         //autohor kelimeleri ayırıyor 
         if(input.getAuthors()!=null) {
@@ -160,33 +164,47 @@ public class JsonHandler {
             }
         }
 
-        divide = input.getIsbn().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getIsbn()!=null) {
+            divide = input.getIsbn().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getPublisher().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getPublisher()!=null) {
+            divide = input.getPublisher().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getDate().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getDate()!=null) {
+            divide = input.getDate().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getEdition().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getEdition()!=null) {
+            divide = input.getEdition().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getLanguage().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getLanguage()!=null) {
+            divide = input.getLanguage().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getRating().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getRating()!=null) {
+            divide = input.getRating().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
-        divide = input.getCover().split(" ");
-        for (int l = 0;l<divide.length;l++) {
-            attrList.add(divide[l]);
+        if(input.getCover()!=null) {
+            divide = input.getCover().split(" ");
+            for (int l = 0;l<divide.length;l++) {
+                attrList.add(divide[l]);
+            }
         }
 
         
