@@ -1,10 +1,11 @@
 import java.io.*;
 
 import javax.json.*;
-import javax.swing.text.html.HTML.Tag;
-
+import javax.json.stream.JsonGenerator;
 //import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonHandler {
 
@@ -224,6 +225,7 @@ public class JsonHandler {
             }
         }
         input.setAttr(attrList);
+        //lib.addToLib(input);
 
         boolean ckck = false;
         for (int m = 0;m<lib.getLibraries().size();m++){
@@ -237,12 +239,15 @@ public class JsonHandler {
 
     public void writeToJson(Library input , String filePath , boolean mode) {
         ArrayList<Book> lib = input.getLibraries();
+        Map<String, Object> config = new HashMap<>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory writerFactory = Json.createWriterFactory(config);
         boolean printed = false;
         if (input.getSize() == 0) {
             // gui will print an error due to empty input
         } else  {
             try (FileWriter fw = new FileWriter(filePath , mode)) {
-                JsonWriter jw = Json.createWriter(fw);
+                JsonWriter jw = writerFactory.createWriter(fw);
                 JsonArrayBuilder output = Json.createArrayBuilder();
 
                 for ( int i = 0 ; i < input.getSize() ; i++) {
