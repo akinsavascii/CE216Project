@@ -301,6 +301,7 @@ public class GUI extends Application {
 
     deleteButton.setOnAction(e -> {
         library.getLibraries().remove(book);
+        jsn.writeToJson(library , "test.json" , false);
         updateBookListView();
         inspectorPane.setCenter(null);
     });
