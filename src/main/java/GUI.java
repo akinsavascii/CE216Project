@@ -6,12 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class GUI extends Application {
@@ -118,7 +119,7 @@ public class GUI extends Application {
             showImportDialog(primaryStage);
         });
         importButton.setOnAction(event -> {importAction();});
-        exportButton.setOnAction(event -> {exportAction();});
+        exportButton.setOnAction(event -> {exportAction(primaryStage);});
         helpButton.setOnAction(event -> {helpAction(primaryStage);});
 
         bookListView.setOnMouseClicked(event -> {
@@ -131,12 +132,37 @@ public class GUI extends Application {
             }
         });
     }
-    private void exportAction(){
-        jsn.writeToJson(library, "test.json", false);
+    private void exportAction(Stage primaryStage) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        dialog.setTitle("Export");
+        //Label text = new Label("Please enter the path of the file you want books to get exported:");
+        Label fileName = new Label("Enter a name for output file, then choose a directory via clicking 'export'.");
+        TextField exportPath = new TextField();
+        DirectoryChooser dChooser = new DirectoryChooser();
+        Button ChooseFileButton = new Button("Export");
+        ChooseFileButton.setOnAction(e -> {
+            File selectedFile = dChooser.showDialog(primaryStage);
+            String path = selectedFile.toString() + "\\" + exportPath.getText() + ".json";
+            File file = new File(path);
+            System.out.println(path);
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            jsn.writeToJson( library , path , false);
+        });
+
+        VBox exportVbox = new VBox(20);
+        exportVbox.setPadding(new Insets(20, 20, 20, 20));
+        exportVbox.getChildren().addAll(fileName, exportPath ,ChooseFileButton);
+        Scene dialogScene = new Scene(exportVbox, 800, 300);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
-    private void importAction(){
-        jsn.readFile(library, "test.json");
-    }
+    private void importAction(){ jsn.readFile(library, "test.json"); updateBookListView();}
     private void helpAction(Stage primaryStage){
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);

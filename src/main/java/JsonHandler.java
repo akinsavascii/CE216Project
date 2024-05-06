@@ -14,23 +14,27 @@ public class JsonHandler {
 
     public void readFile(Library lib , String filePath) {
 
-        try ( Reader rd = new FileReader(filePath)) {
-            JsonReader jrd = Json.createReader(rd);
-            Object typeTest = jrd.readValue();
+        try ( FileReader rd = new FileReader(filePath)) {
+            File file = new File(filePath);
+            if (file.length() != 0) { // File is empty and will crash the program
+                JsonReader jrd = Json.createReader(rd);
+                Object typeTest = jrd.readValue();
 
-            if (typeTest instanceof JsonObject bookObject) { // for files with only one book objects
-                
-                inputFromJson(lib ,bookObject);
+                if (typeTest instanceof JsonObject bookObject) { // for files with only one book objects
 
-            } else if (typeTest instanceof JsonArray libArray) { // for files with multiple book objects
-
-                for (JsonValue book : libArray) {
-
-                    JsonObject bookObject = (JsonObject) book;
                     inputFromJson(lib ,bookObject);
 
+                } else if (typeTest instanceof JsonArray libArray) { // for files with multiple book objects
+
+                    for (JsonValue book : libArray) {
+
+                        JsonObject bookObject = (JsonObject) book;
+                        inputFromJson(lib ,bookObject);
+
+                    }
                 }
             }
+
 
 
         } catch (IOException e) {
@@ -42,17 +46,17 @@ public class JsonHandler {
     private static void inputFromJson(Library lib , JsonObject bookObject) {
         Book input = new Book();
 
-        if (bookObject.containsKey("title")) {
+        if (bookObject.containsKey("title") && !(bookObject.isNull("title")) ) {
             String title = bookObject.getString("title");
             input.setTitle(title);
         }
         
-        if (bookObject.containsKey("subtitle")) {
+        if (bookObject.containsKey("subtitle") && !(bookObject.isNull("subtitle")) ) {
             String subtitle = bookObject.getString("subtitle");
             input.setSubtitle(subtitle);
         }
 
-        if (bookObject.containsKey("authors")) {
+        if (bookObject.containsKey("authors") && !(bookObject.isNull("authors")) ) {
             JsonValue aut = bookObject.get("authors"); // to check whether the input is a string or an array
             ArrayList<String> authors = new ArrayList<>();
             if (aut.getValueType() == JsonValue.ValueType.STRING) {   // for string inputs
@@ -68,7 +72,7 @@ public class JsonHandler {
             input.setAuthors(authors);
         }
 
-        if (bookObject.containsKey("translators")) {
+        if (bookObject.containsKey("translators") && !(bookObject.isNull("translators")) ) {
             JsonValue tran = bookObject.get("translators"); // to check whether the input is a string or an array
             ArrayList<String> translators = new ArrayList<>();
             if (tran.getValueType() == JsonValue.ValueType.STRING) { // for string inputs
@@ -84,41 +88,41 @@ public class JsonHandler {
             input.setTranslators(translators);
         }
 
-        if (bookObject.containsKey("isbn")) {
+        if (bookObject.containsKey("isbn") && !(bookObject.isNull("isbn")) ) {
             String isbn = bookObject.getString("isbn");
             input.setIsbn(isbn);
         }
 
-        if (bookObject.containsKey("publisher")) {
+        if (bookObject.containsKey("publisher") && !(bookObject.isNull("publisher")) ) {
             String publisher = bookObject.getString("publisher");
             input.setPublisher(publisher);
         }
 
-        if (bookObject.containsKey("date")) {
+        if (bookObject.containsKey("date") && !(bookObject.isNull("date")) ) {
             String date = bookObject.getString("date");
             input.setDate(date);
         }
 
-        if (bookObject.containsKey("edition")) {
+        if (bookObject.containsKey("edition") && !(bookObject.isNull("edition")) ) {
             String edition = bookObject.getString("edition");
             input.setEdition(edition);
         }
-        if (bookObject.containsKey("cover")) {
+        if (bookObject.containsKey("cover") && !(bookObject.isNull("cover")) ) {
             String cover = bookObject.getString("cover");
             input.setCover(cover);
         }
 
-        if (bookObject.containsKey("language")) {
+        if (bookObject.containsKey("language") && !(bookObject.isNull("language")) ) {
             String language = bookObject.getString("language");
             input.setLanguage(language);
         }
 
-        if (bookObject.containsKey("rating")) {
+        if (bookObject.containsKey("rating") && !(bookObject.isNull("rating")) ) {
             String rating = bookObject.getString("rating");
             input.setRating(rating);
         }
 
-        if (bookObject.containsKey("tags")) {
+        if (bookObject.containsKey("tags") && !(bookObject.isNull("tags")) ) {
             JsonValue tag = bookObject.get("tags"); // to check whether the input is a string or an array
             ArrayList<String> tagList = new ArrayList<>();
             if (tag.getValueType() == JsonValue.ValueType.STRING) { // for string inputs
@@ -225,16 +229,12 @@ public class JsonHandler {
             }
         }
         input.setAttr(attrList);
-        //lib.addToLib(input);
-
-        boolean ckck = false;
-        for (int m = 0;m<lib.getLibraries().size();m++){
-            if(lib.getLibraries().get(m).getIsbn().equals(input.getIsbn())){
-                ckck= true;
-                break;
-            }
+        if ( !(lib.isDuplicate(input)) ) {
+            lib.addToLib(input);
         }
-        if(!ckck){lib.addToLib(input);}
+
+
+
     }
 
     public void writeToJson(Library input , String filePath , boolean mode) {
@@ -244,7 +244,11 @@ public class JsonHandler {
         JsonWriterFactory writerFactory = Json.createWriterFactory(config);
         boolean printed = false;
         if (input.getSize() == 0) {
-            // gui will print an error due to empty input
+            try (PrintWriter pw = new PrintWriter("test.json")) {
+                pw.close();
+            } catch (Exception ignored) {
+
+            }
         } else  {
             try (FileWriter fw = new FileWriter(filePath , mode)) {
                 JsonWriter jw = writerFactory.createWriter(fw);
@@ -252,12 +256,16 @@ public class JsonHandler {
 
                 for ( int i = 0 ; i < input.getSize() ; i++) {
                     JsonObjectBuilder obj = Json.createObjectBuilder();
-                    if (lib.get(i).getTitle() != null) {
+                    if (lib.get(i).getTitle() != null && !lib.get(i).getTitle().isEmpty() ) {
                         obj.add("title" , lib.get(i).getTitle());
+                    } else {
+                        obj.addNull("title");
                     }
 
-                    if (lib.get(i).getSubtitle() != null) {
+                    if (lib.get(i).getSubtitle() != null && !lib.get(i).getSubtitle().isEmpty()) {
                         obj.add("subtitle" , lib.get(i).getSubtitle());
+                    } else {
+                        obj.addNull("subtitle");
                     }
 
                     if (lib.get(i).getAuthors() != null && !(lib.get(i).getAuthors().isEmpty()) ) {
@@ -270,6 +278,8 @@ public class JsonHandler {
                             }
                             obj.add("authors" , aut);
                         }
+                    } else {
+                        obj.addNull("authors");
                     }
 
                     if (lib.get(i).getTranslators() != null && !(lib.get(i).getTranslators().isEmpty()) ) {
@@ -282,34 +292,50 @@ public class JsonHandler {
                             }
                             obj.add("translators" , tran);
                         }
+                    } else {
+                        obj.addNull("translators");
                     }
 
-                    if (lib.get(i).getIsbn() != null) {
+                    if (lib.get(i).getIsbn() != null && !lib.get(i).getIsbn().isEmpty()) {
                         obj.add("isbn" , lib.get(i).getIsbn());
+                    }  else {
+                        obj.addNull("isbn");
                     }
 
-                    if (lib.get(i).getPublisher() != null) {
+                    if (lib.get(i).getPublisher() != null && !lib.get(i).getPublisher().isEmpty()) {
                         obj.add("publisher" , lib.get(i).getPublisher());
+                    }  else {
+                        obj.addNull("publisher");
                     }
 
-                    if (lib.get(i).getDate() != null) {
+                    if (lib.get(i).getDate() != null && !lib.get(i).getDate().isEmpty()) {
                         obj.add("date" , lib.get(i).getDate());
+                    }  else {
+                        obj.addNull("date");
                     }
 
-                    if (lib.get(i).getEdition() != null) {
+                    if (lib.get(i).getEdition() != null && !lib.get(i).getEdition().isEmpty()) {
                         obj.add("edition" , lib.get(i).getEdition());
+                    }  else {
+                        obj.addNull("edition");
                     }
 
-                    if (lib.get(i).getCover() != null) {
+                    if (lib.get(i).getCover() != null && !lib.get(i).getCover().isEmpty()) {
                         obj.add("cover" , lib.get(i).getCover());
+                    }  else {
+                        obj.addNull("cover");
                     }
 
-                    if (lib.get(i).getLanguage() != null) {
+                    if (lib.get(i).getLanguage() != null && !lib.get(i).getLanguage().isEmpty()) {
                         obj.add("language" , lib.get(i).getLanguage());
+                    }  else {
+                        obj.addNull("language");
                     }
 
-                    if (lib.get(i).getRating() != null) {
+                    if (lib.get(i).getRating() != null && !lib.get(i).getRating().isEmpty()) {
                         obj.add("rating" , lib.get(i).getRating());
+                    }  else {
+                        obj.addNull("rating");
                     }
 
                     if (lib.get(i).getTags() != null && !(lib.get(i).getTags().isEmpty()) ) {
@@ -322,7 +348,10 @@ public class JsonHandler {
                             }
                             obj.add("tags" , tags);
                         }
+                    } else {
+                        obj.addNull("tags");
                     }
+
                     if (input.getSize() == 1) {
                         jw.writeObject(obj.build());
                         printed = true;

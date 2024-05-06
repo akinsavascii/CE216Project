@@ -124,5 +124,11 @@ public class Library{
             return null;
         }
 
-    
+        public boolean isDuplicate(Book input) {
+            for (Book book : library) {
+                if ( book.getAttr().equals(input.getAttr()) ) {
+                    return true;
+                }
+            } return false;
+        }
 }

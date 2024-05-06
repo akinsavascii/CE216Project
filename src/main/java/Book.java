@@ -7,19 +7,19 @@ import com.google.gson.Gson;
 // The Book class
 class Book {
 
-    private String title = null;
-    private String subtitle = null;
-    private ArrayList<String> authors = null;
-    private ArrayList<String> translators = null;
-    private String isbn = null;
-    private String publisher = null;
-    private String date = null;
-    private String edition = null;
-    private String cover = null;
-    private String language = null;
-    private String rating = null;
-    private ArrayList<String> tags = null;
-    private ArrayList<String> attr = null;
+    private String title = "";
+    private String subtitle = "";
+    private ArrayList<String> authors = new ArrayList<>();
+    private ArrayList<String> translators = new ArrayList<>();
+    private String isbn = "";
+    private String publisher = "";
+    private String date = "";
+    private String edition = "";
+    private String cover = "";
+    private String language = "";
+    private String rating = "";
+    private ArrayList<String> tags = new ArrayList<>();
+    private ArrayList<String> attr = new ArrayList<>();
     
 
     // Constructor for books attributes
