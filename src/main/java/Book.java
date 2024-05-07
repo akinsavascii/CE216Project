@@ -214,6 +214,7 @@ class Book {
     }*/
     public void updateAttr(Book book) {
         ArrayList<String> atr = new ArrayList<String>();
+        ArrayList<String> atrlower = new ArrayList<String>();
         if (book.getAttr()!=null) {
             book.getAttr().clear();
         } else {
@@ -326,6 +327,10 @@ class Book {
                 }
             }
         }
+        for(int ijk = 0; ijk<book.getAttr().size();ijk++) {
+            atrlower.add(book.getAttr().get(ijk).toLowerCase());
+        }
+        book.setAttr(atrlower);
     }
 
 

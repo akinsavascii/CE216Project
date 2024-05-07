@@ -227,7 +227,11 @@ public class JsonHandler {
                 }
             }
         }
-        input.setAttr(attrList);
+        ArrayList<String> atrlower = new ArrayList<String>();
+        for(int ijk = 0; ijk<attrList.size();ijk++) {
+            atrlower.add(attrList.get(ijk).toLowerCase());
+        }
+        input.setAttr(atrlower);
         if ( !(lib.isDuplicate(input)) ) {
             lib.addToLib(input);
         }
