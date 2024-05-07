@@ -41,6 +41,7 @@ public class Library{
 
     public static ArrayList<Book> search(String search) {
         ArrayList<Book> DisplaySearch = new ArrayList<Book>();
+        search = search.toLowerCase();
         String[] parts = search.split(" ");
             for (int j =0;j<parts.length;j++){
                 String search2 = parts[j];
