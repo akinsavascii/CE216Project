@@ -2,7 +2,6 @@ import java.io.*;
 
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
-//import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -237,14 +236,13 @@ public class JsonHandler {
 
     }
 
-    public void writeToJson(Library input , String filePath , boolean mode) {
-        ArrayList<Book> lib = input.getLibraries();
+    public void writeToJson(ArrayList<Book> lib , String filePath , boolean mode) {
         Map<String, Object> config = new HashMap<>();
         config.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(config);
         boolean printed = false;
-        if (input.getSize() == 0) {
-            try (PrintWriter pw = new PrintWriter("test.json")) {
+        if (lib.isEmpty()) {
+            try (PrintWriter pw = new PrintWriter(filePath)) {
                 pw.close();
             } catch (Exception ignored) {
 
@@ -254,7 +252,7 @@ public class JsonHandler {
                 JsonWriter jw = writerFactory.createWriter(fw);
                 JsonArrayBuilder output = Json.createArrayBuilder();
 
-                for ( int i = 0 ; i < input.getSize() ; i++) {
+                for ( int i = 0 ; i < lib.size() ; i++) {
                     JsonObjectBuilder obj = Json.createObjectBuilder();
                     if (lib.get(i).getTitle() != null && !lib.get(i).getTitle().isEmpty() ) {
                         obj.add("title" , lib.get(i).getTitle());
@@ -352,7 +350,7 @@ public class JsonHandler {
                         obj.addNull("tags");
                     }
 
-                    if (input.getSize() == 1) {
+                    if (lib.size() == 1) {
                         jw.writeObject(obj.build());
                         printed = true;
                     } else {

@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -18,9 +19,10 @@ import java.util.stream.Collectors;
 public class GUI extends Application {
 
     private ArrayList<String> labelStrings = new ArrayList<>();
-    private ArrayList<String> searchStrings = new ArrayList<>();
+    //private ArrayList<String> searchStrings = new ArrayList<>();
     ListView<String> bookListView = new ListView<>();
-    private Library library = new Library(); 
+    private Library library = new Library();
+    private ArrayList<Book> chosenBooks = new ArrayList<>(); // selected books for export
     JsonHandler jsn = new JsonHandler();
     Stage primaryStage = new Stage();
     BorderPane inspectorPane = new BorderPane();
@@ -29,7 +31,7 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
 
 
-        jsn.readFile(library , "test.json"); //reads file first to make them appear when the program opens.
+        jsn.readFile(library , "library.json"); //reads file first to make them appear when the program opens.
         ArrayList<Book> savedBooks = library.getLibraries();
         ObservableList<String> SavedBookTitles = FXCollections.observableArrayList(
                 savedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
@@ -73,15 +75,25 @@ public class GUI extends Application {
         labelScrollPane.setContent(labelBox);
         labelScrollPane.setPrefHeight(250);
         Button filterButton = new Button("Filter");
+        Button resetButton = new Button("Reset");
+
         filterButton.setOnAction(e -> {
             labelBox.getChildren().clear();
             labelStrings.clear();
         });
-        searchPaneBottom.getChildren().addAll(addPane, labelScrollPane, filterButton);
+
+        resetButton.setOnAction(e -> {
+            labelBox.getChildren().clear();
+            labelStrings.clear();
+            updateBookListView();
+        });
+        HBox searchPaneButtons = new HBox();
+        searchPaneButtons.getChildren().addAll(filterButton , resetButton );
+        searchPaneBottom.getChildren().addAll(addPane, labelScrollPane, searchPaneButtons);
         SplitPane searchSplitPane = new SplitPane(searchPaneTop, searchPaneBottom);
         searchSplitPane.setOrientation(javafx.geometry.Orientation.VERTICAL);
         searchSplitPane.setDividerPositions(0.3);
-        
+
         catalogPane.setCenter(bookListView);
         filterButton.setOnAction(e -> {
             ArrayList<String> selectedTags = labelStrings;
@@ -112,21 +124,21 @@ public class GUI extends Application {
         root.setCenter(splitPane);
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Blank Page");
+        primaryStage.setTitle("Library App");
         primaryStage.show();
-
         addBookButton.setOnAction(event -> {
             showImportDialog(primaryStage);
         });
-        importButton.setOnAction(event -> {importAction();});
+        importButton.setOnAction(event -> {importAction(primaryStage);});
         exportButton.setOnAction(event -> {exportAction(primaryStage);});
         helpButton.setOnAction(event -> {helpAction(primaryStage);});
 
         bookListView.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 String selectedTitle = bookListView.getSelectionModel().getSelectedItem();
+                int selectedIndex = bookListView.getSelectionModel().getSelectedIndex();
                 if (selectedTitle != null) {
-                    Book selectedBook = library.getBookByTitle(selectedTitle);
+                    Book selectedBook = library.getLibraries().get(selectedIndex);
                     displayBookDetails(selectedBook, inspectorPane);
                 }
             }
@@ -141,8 +153,8 @@ public class GUI extends Application {
         Label fileName = new Label("Enter a name for output file, then choose a directory via clicking 'export'.");
         TextField exportPath = new TextField();
         DirectoryChooser dChooser = new DirectoryChooser();
-        Button ChooseFileButton = new Button("Export");
-        ChooseFileButton.setOnAction(e -> {
+        Button chooseFileButton = new Button("Export");
+        chooseFileButton.setOnAction(e -> {
             File selectedFile = dChooser.showDialog(primaryStage);
             String path = selectedFile.toString() + "\\" + exportPath.getText() + ".json";
             File file = new File(path);
@@ -152,17 +164,46 @@ public class GUI extends Application {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            jsn.writeToJson( library , path , false);
+            jsn.writeToJson( chosenBooks , path , false);
+            chosenBooks.clear();
+            inspectorPane.getChildren().clear();
+            dialog.close();
         });
 
         VBox exportVbox = new VBox(20);
         exportVbox.setPadding(new Insets(20, 20, 20, 20));
-        exportVbox.getChildren().addAll(fileName, exportPath ,ChooseFileButton);
+        exportVbox.getChildren().addAll(fileName, exportPath ,chooseFileButton);
         Scene dialogScene = new Scene(exportVbox, 800, 300);
         dialog.setScene(dialogScene);
         dialog.show();
     }
-    private void importAction(){ jsn.readFile(library, "test.json"); updateBookListView();}
+    private void importAction(Stage primaryStage){
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        dialog.setTitle("Import");
+        //Label text = new Label("Please enter the path of the file you want books to get exported:");
+        Label info = new Label("Choose the file you want to import books from");
+        FileChooser fChooser = new FileChooser();
+        Button chooseFileButton = new Button("Choose file");
+        chooseFileButton.setOnAction(e -> {
+            FileChooser.ExtensionFilter fileType = new FileChooser.ExtensionFilter("JSON files", "*.json");
+            fChooser.getExtensionFilters().add(fileType);
+            File selectedFile = fChooser.showOpenDialog(primaryStage);
+            String path = selectedFile.toString();
+            jsn.readFile(library , path);
+            System.out.println(path);
+            updateBookListView();
+            dialog.close();
+        });
+
+        VBox importVbox = new VBox(20);
+        importVbox.setPadding(new Insets(20, 20, 20, 20));
+        importVbox.getChildren().addAll(info ,chooseFileButton);
+        Scene dialogScene = new Scene(importVbox, 800, 300);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
     private void helpAction(Stage primaryStage){
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -317,17 +358,37 @@ public class GUI extends Application {
 
     Button editButton = new Button("Edit");
     Button deleteButton = new Button("Delete");
+    Button deselectButton = new Button("Delete from export list");
+    Button selectButton = new Button("Select for export list");
 
-    VBox detailsBoxSecond = new VBox(titleLabel, subTitleLabel, authorLabel, translatorLabel, 
-                               isbnLabel, publisherLabel, dateLabel, editionLabel, 
-                               coverLabel, languageLabel, ratingLabel, tagLabel,
-                               editButton, deleteButton);
+    VBox detailsBoxSecond = new VBox(titleLabel, subTitleLabel, authorLabel, translatorLabel,
+                isbnLabel, publisherLabel, dateLabel, editionLabel,
+                coverLabel, languageLabel, ratingLabel, tagLabel,
+                editButton, deleteButton);
 
+
+    if (chosenBooks.contains(book)) {
+        detailsBoxSecond.getChildren().add(deselectButton);
+    } else {
+        detailsBoxSecond.getChildren().add(selectButton);
+    }
     inspectorPane.setCenter(detailsBoxSecond);
+
+    deselectButton.setOnAction(e -> {
+        chosenBooks.remove(book);
+        detailsBoxSecond.getChildren().remove(deselectButton);
+        detailsBoxSecond.getChildren().add(selectButton);
+    });
+
+    selectButton.setOnAction(e -> {
+        chosenBooks.add(book);
+        detailsBoxSecond.getChildren().remove(selectButton);
+        detailsBoxSecond.getChildren().add(deselectButton);
+    });
 
     deleteButton.setOnAction(e -> {
         library.getLibraries().remove(book);
-        jsn.writeToJson(library , "test.json" , false);
+        jsn.writeToJson(library.getLibraries() , "library.json" , false);
         updateBookListView();
         inspectorPane.setCenter(null);
     });
@@ -446,7 +507,7 @@ public class GUI extends Application {
 
     @Override
     public void stop() {
-        jsn.writeToJson(library , "test.json" , false);
+        jsn.writeToJson(library.getLibraries() , "library.json" , false);
     }
 
     public static void main(String[] args) {
