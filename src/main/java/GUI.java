@@ -116,6 +116,12 @@ public class GUI extends Application {
                     searchedBooks.stream().map(Book::getTitle).collect(Collectors.toList())
             );
             bookListView.setItems(bookTitles);
+            if(textToSearch.isEmpty())
+            {
+                labelBox.getChildren().clear();
+                labelStrings.clear();
+                updateBookListView();
+            }
         });
         SplitPane splitPane = new SplitPane(searchSplitPane, catalogPane, inspectorPane);
         splitPane.setDividerPositions(0.265, 0.6);
@@ -127,7 +133,7 @@ public class GUI extends Application {
         primaryStage.setTitle("Library App");
         primaryStage.show();
         addBookButton.setOnAction(event -> {
-            showImportDialog(primaryStage);
+            addBookDialog(primaryStage);
         });
         importButton.setOnAction(event -> {importAction(primaryStage);});
         exportButton.setOnAction(event -> {exportAction(primaryStage);});
@@ -136,9 +142,9 @@ public class GUI extends Application {
         bookListView.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 String selectedTitle = bookListView.getSelectionModel().getSelectedItem();
-                int selectedIndex = bookListView.getSelectionModel().getSelectedIndex();
+                //
                 if (selectedTitle != null) {
-                    Book selectedBook = library.getLibraries().get(selectedIndex);
+                    Book selectedBook = library.getBookByTitle(selectedTitle);
                     displayBookDetails(selectedBook, inspectorPane);
                 }
             }
@@ -219,7 +225,7 @@ public class GUI extends Application {
         dialog.show();
     }
 
-    private void showImportDialog(Stage primaryStage) {
+    private void addBookDialog(Stage primaryStage) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
