@@ -5,9 +5,11 @@
 plugins {
     kotlin("jvm") version "1.6.0"
     id("org.openjfx.javafxplugin") version "0.0.9"
+    id("edu.sc.seis.launch4j") version "3.0.5"
     `java-library`
     `maven-publish`
     `application`
+    java
 }
 
 repositories {
@@ -54,4 +56,17 @@ tasks.withType<Javadoc>() {
 
 application {
     mainClass = "MainGUI"
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainGUI"
+    }
+    from(configurations.runtimeClasspath.get().filter { it.isDirectory }.map { it.toPath() })
+}
+
+launch4j {
+    mainClassName = "MainGUI"
+    icon = "${projectDir}/icons/myApp.ico"
+    manifest = "${projectDir}/CE216Project.exe.manifest"
 }
